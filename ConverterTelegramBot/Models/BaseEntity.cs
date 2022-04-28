@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AssistantBot.Models
+namespace ConverterTelegramBot.Models
 {
 	public class BaseEntity
 	{

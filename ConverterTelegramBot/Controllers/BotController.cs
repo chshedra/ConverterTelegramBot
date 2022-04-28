@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AssistantBot.Models;
 using ConverterTelegramBot.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -36,7 +35,7 @@ namespace ConverterTelegramBot.Controllers
 				return Ok();
 			}
 
-			var botUser = new BotUser()
+			var botUser = new BotUserEntity()
 			{
 				UserName = chat.Username,
 				ChatId = chat.Id,
