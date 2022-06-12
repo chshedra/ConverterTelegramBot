@@ -1,19 +1,14 @@
-﻿using System.Drawing;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InputFiles;
 
 namespace ConverterTelegramBot.Commands
 {
 	public class PdfConvertCommand : ICommand
 	{
-		private readonly BotDbContext _context;
-
 		private readonly IUserService _userService;
 
 		private readonly TelegramBotClient _botClient;
@@ -38,17 +33,15 @@ namespace ConverterTelegramBot.Commands
 			{
 				case MessageType.Text:
 				{
-					fileBytes = FileHandler.PdfConverter.ConvertToPdf(update.Message?.Text);
+					fileBytes = await _dataProvider.GetPdfBytes(update.Message?.Text);
 					break;
 				}
 				case MessageType.Photo:
 				{
-					var fileId = update.Message?.Photo[update.Message.Photo.Length - 1].FileId;
-					
-					var file = await _botClient.GetFileAsync(fileId);
+					var fileId = 
+						update.Message?.Photo[update.Message.Photo.Length - 1].FileId;
 
-					fileBytes = _dataProvider.GetImageBytes(_botClient, file).Result;
-					
+					fileBytes = await _dataProvider.GetPdfBytes(_botClient, fileId);
 					break;
 				}
 			}

@@ -1,16 +1,15 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Telegram.Bot.Types;
 
 namespace ConverterTelegramBot.Services
 {
 	/// <summary>
-	/// Поведение классов выполнения команд.
+	/// Service for command execute
 	/// </summary>
 	public interface ICommandExecutor
 	{
 		/// <summary>
-		/// Выполняет команду.
+		/// Execute command
 		/// </summary>
 		Task Execute(Update update);
 	}

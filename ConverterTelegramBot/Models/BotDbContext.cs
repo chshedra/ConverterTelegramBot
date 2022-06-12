@@ -1,8 +1,10 @@
-﻿using System.Net;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ConverterTelegramBot.Models
 {
+	/// <summary>
+	/// Bot database context
+	/// </summary>
 	public class BotDbContext : DbContext
 	{
 		public BotDbContext(DbContextOptions<BotDbContext> options) : base(options) { }

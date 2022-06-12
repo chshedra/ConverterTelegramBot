@@ -6,15 +6,24 @@ using Telegram.Bot.Types.Enums;
 
 namespace ConverterTelegramBot.Services
 {
+	/// <inheritdoc/>
 	public class UserService : IUserService
 	{
+		/// <summary>
+		/// Database context
+		/// </summary>
 		private readonly BotDbContext _context;
 
+		/// <summary>
+		/// Create instance of user service
+		/// </summary>
+		/// <param name="context">Database context</param>
 		public UserService(BotDbContext context)
 		{
 			_context = context;
 		}
 
+		/// <inheritdoc/>
 		public async Task<BotUserEntity> GetUser(Update update)
 		{
 			var newUser = update.Type switch

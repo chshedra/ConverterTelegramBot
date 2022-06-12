@@ -5,8 +5,10 @@ using Telegram.Bot.Types.InputFiles;
 
 namespace ConverterTelegramBot.Services
 {
+	/// <inheritdoc/>
 	public class ChatDataProvider : IChatDataProvider
 	{
+		/// <inheritdoc/>
 		public async void SendPdfFile(TelegramBotClient botClient, long chatId, byte[] fileBytes)
 		{
 			using (var fs = new FileStream("temp.pdf", FileMode.Create))
@@ -22,18 +24,24 @@ namespace ConverterTelegramBot.Services
 			}
 		}
 
-		public async Task<byte[]> GetImageBytes(TelegramBotClient botClient, Telegram.Bot.Types.File file)
+		/// <inheritdoc/>
+		public async Task<byte[]> GetPdfBytes(TelegramBotClient botClient, string fileId)
 		{
+			var image = await botClient.GetFileAsync(fileId);
 			byte[] fileBytes;
 			MemoryStream memoryStream;
 
 			using (memoryStream = new MemoryStream())
 			{
-				await botClient.DownloadFileAsync(file.FilePath, memoryStream);
+				await botClient.DownloadFileAsync(image.FilePath, memoryStream);
 				fileBytes = FileHandler.PdfConverter.ConvertToPdf(memoryStream);
 			}
 
 			return fileBytes;
 		}
+
+		/// <inheritdoc/>
+		public async Task<byte[]> GetPdfBytes(string text) => 
+			await Task.FromResult(FileHandler.PdfConverter.ConvertToPdf(text));
 	}
 }
