@@ -1,5 +1,7 @@
 using System;
+using ConverterTelegramBot.Commands;
 using ConverterTelegramBot.Models;
+using ConverterTelegramBot.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +24,15 @@ namespace ConverterTelegramBot
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
-			services.AddDbContext<BotDbContext>(options =>
-				  options.UseSqlServer(Configuration.GetConnectionString("BotConnection")));
+			services.AddDbContext<BotDbContext>(opt =>
+				opt.UseSqlServer(Configuration.GetConnectionString("BotConnection")), ServiceLifetime.Singleton);
 			services.AddSingleton<Bot>();
+			services.AddSingleton<ICommandExecutor, CommandExecutor>();
+			services.AddSingleton<IUserService, UserService>();
+			services.AddSingleton<ICommand, StartCommand>();
+			services.AddSingleton<ICommand, GetTextCommand>();
+			services.AddSingleton<ICommand, PdfConvertCommand>();
+
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)

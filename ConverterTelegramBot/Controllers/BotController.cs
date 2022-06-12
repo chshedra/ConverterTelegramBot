@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ConverterTelegramBot.Models;
+using ConverterTelegramBot.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Telegram.Bot;
@@ -12,19 +14,16 @@ namespace ConverterTelegramBot.Controllers
 	[Route("api/message")]
 	public class BotController : ControllerBase
 	{
-		private readonly TelegramBotClient _telegramBotClient;
+		private readonly ICommandExecutor _commandExecutor;
 
-		private readonly BotDbContext _botDbContext;
-
-		public BotController(Bot telegramBot, BotDbContext dbContext)
+		public BotController(ICommandExecutor commandExecutor)
 		{
-			_botDbContext = dbContext;
-			_telegramBotClient = telegramBot.GetBot().Result;
+			_commandExecutor = commandExecutor;
 		}
 
 		[HttpPost]
 		[Route("update")]
-		public async Task<IActionResult> Update([FromBody]object update)
+		public async Task<IActionResult> Update([FromBody] object update)
 		{
 			var upd = JsonConvert.DeserializeObject<Update>(update.ToString());
 
@@ -35,19 +34,14 @@ namespace ConverterTelegramBot.Controllers
 				return Ok();
 			}
 
-			var botUser = new BotUserEntity()
+			try
 			{
-				UserName = chat.Username,
-				ChatId = chat.Id,
-				FirstName = chat.FirstName,
-				LastName = chat.LastName
-			};
-
-			var result = await _botDbContext.Users.AddAsync(botUser);
-			await _botDbContext.SaveChangesAsync();
-
-			_telegramBotClient.SendTextMessageAsync(chat.Id,
-				"Вы успешно зарегестрировались", ParseMode.Markdown);
+				await _commandExecutor.Execute(upd);
+			}
+			catch (Exception ex)
+			{
+				return Ok();
+			}
 
 			return Ok();
 		}

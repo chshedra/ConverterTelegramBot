@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="1.50.5147" />
-    <PackageReference Include="Telegram.Bot" Version="17.0.0" />
+    <ProjectReference Include="..\FileConverter\FileHandler.csproj" />
   </ItemGroup>
 
 </Project>
