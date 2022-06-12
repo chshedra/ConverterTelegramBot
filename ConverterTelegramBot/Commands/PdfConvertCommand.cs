@@ -18,12 +18,15 @@ namespace ConverterTelegramBot.Commands
 
 		private readonly TelegramBotClient _botClient;
 
+		private readonly IChatDataProvider _dataProvider;
+
 		public string Name => "PdfConvertCommand";
 
-		public PdfConvertCommand(IUserService userService, Bot bot)
+		public PdfConvertCommand(IUserService userService, Bot bot, IChatDataProvider dataProvider)
 		{
 			_userService = userService;
 			_botClient = bot.GetBot().Result;
+			_dataProvider = dataProvider;
 		}
 
 		public async Task ExecuteAsync(Update update)
@@ -44,29 +47,13 @@ namespace ConverterTelegramBot.Commands
 					
 					var file = await _botClient.GetFileAsync(fileId);
 
-					MemoryStream memoryStream;
-					using (memoryStream = new MemoryStream())
-					{
-						await _botClient.DownloadFileAsync(file.FilePath, memoryStream);
-						var msBytes = memoryStream.ToArray();
-						fileBytes = FileHandler.PdfConverter.ConvertToPdf(memoryStream);
-					}
-
+					fileBytes = _dataProvider.GetImageBytes(_botClient, file).Result;
+					
 					break;
 				}
 			}
 			
-			using (var fs = new FileStream("FileName.pdf", FileMode.Create))
-			{
-				foreach (var bt in fileBytes)
-				{
-					fs.WriteByte(bt);
-				}
-
-				fs.Seek(0, SeekOrigin.Begin);
-				var document = new InputOnlineFile(fs, "file.pdf");
-				await _botClient.SendDocumentAsync(user.ChatId, document);
-			}
+			_dataProvider.SendPdfFile(_botClient, user.ChatId, fileBytes);
 		}
 	}
 }

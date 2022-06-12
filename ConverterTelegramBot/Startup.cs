@@ -32,7 +32,7 @@ namespace ConverterTelegramBot
 			services.AddSingleton<ICommand, StartCommand>();
 			services.AddSingleton<ICommand, GetTextCommand>();
 			services.AddSingleton<ICommand, PdfConvertCommand>();
-
+			services.AddSingleton<IChatDataProvider, ChatDataProvider>();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
