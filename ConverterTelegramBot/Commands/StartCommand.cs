@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ConverterTelegramBot.Infrastructure;
 using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
 using Telegram.Bot;
@@ -41,11 +42,11 @@ namespace ConverterTelegramBot.Commands
 			{
 				new[]
 				{
-					new KeyboardButton("Конвертировать текст в PDF")
+					new KeyboardButton(CommandText.ConvertMessage)
 				}
 			});
 
-			await _botClient.SendTextMessageAsync(user.ChatId, "Выберите необходимое действие",
+			await _botClient.SendTextMessageAsync(user.ChatId, CommandText.CommandChoiceMessage,
 				ParseMode.Markdown, replyMarkup: inlineKeyboard);
 		}
 	}

@@ -8,6 +8,11 @@ namespace ConverterTelegramBot.Services
 	/// <inheritdoc/>
 	public class ChatDataProvider : IChatDataProvider
 	{
+		public async void SendMessage(TelegramBotClient botClient, long chatId, string message)
+		{
+			await botClient.SendTextMessageAsync(chatId, message);
+		}
+
 		/// <inheritdoc/>
 		public async void SendPdfFile(TelegramBotClient botClient, long chatId, byte[] fileBytes)
 		{

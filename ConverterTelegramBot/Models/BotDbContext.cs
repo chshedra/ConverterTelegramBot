@@ -11,7 +11,5 @@ namespace ConverterTelegramBot.Models
 
 		public DbSet<BotUserEntity> Users { get; set; }
 
-		public DbSet<FileEntity> FileEntities { get; set; }
-
 	}
 }

@@ -25,7 +25,7 @@ namespace ConverterTelegramBot.Commands
 			var user = _userService.GetUser(update).Result;
 
 			await _botClient.SendTextMessageAsync(user.ChatId, 
-				"Введите текст для конвертации", ParseMode.Markdown);
+				"Отправьте текст или изображение для конвертации", ParseMode.Markdown);
 		}
 	}
 }

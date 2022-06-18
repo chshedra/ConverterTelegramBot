@@ -12,6 +12,5 @@ namespace ConverterTelegramBot.Models
 
 		public string LastName { get; set; }
 
-		public List<FileEntity> FileEntities { get; set; }
 	}
 }

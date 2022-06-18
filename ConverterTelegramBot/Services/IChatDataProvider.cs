@@ -9,6 +9,11 @@ namespace ConverterTelegramBot.Services
 	public interface IChatDataProvider
 	{
 		/// <summary>
+		/// Send text message to user
+		/// </summary>
+		void SendMessage(TelegramBotClient botClient, long chatId, string message);
+
+		/// <summary>
 		/// Send pdf file to user
 		/// </summary>
 		void SendPdfFile(TelegramBotClient botClient, long chatId, byte[] fileBytes);

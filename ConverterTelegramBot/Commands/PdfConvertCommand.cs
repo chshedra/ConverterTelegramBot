@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ConverterTelegramBot.Infrastructure;
 using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
 using Telegram.Bot;
@@ -52,6 +53,12 @@ namespace ConverterTelegramBot.Commands
 					var fileId = GetFileID(update);
 
 					fileBytes = await _dataProvider.GetPdfBytes(_botClient, fileId);
+					break;
+				}
+				default:
+				{
+					_dataProvider.SendMessage(_botClient, user.ChatId, 
+						CommandText.UnsupportedFileMessage);
 					break;
 				}
 			}

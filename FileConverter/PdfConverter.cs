@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using PdfSharp.Drawing;
@@ -45,7 +46,7 @@ namespace FileHandler
 
 			XGraphics drawSurface = XGraphics.FromPdfPage(page);
 
-			DrawImage(drawSurface, imageStream, 50, 50, 250, 250);
+			DrawImage(drawSurface, imageStream, page.Width.Point, page.Height.Point);
 
 			var pdfStream = new MemoryStream();
 			document.Save(pdfStream);
@@ -60,13 +61,12 @@ namespace FileHandler
 		/// <param name="stream">Stream with image</param>
 		/// <param name="x">XCoordinate</param>
 		/// <param name="y">YCoordinate</param>
-		/// <param name="width">Image width</param>
-		/// <param name="height">Image Height</param>
-		private static void DrawImage(XGraphics drawSurface, MemoryStream stream, int x, int y, int width, int height)
+		private static void DrawImage(XGraphics drawSurface, MemoryStream stream, 
+			double width, double height)
 		{
 			var image = XImage.FromStream(stream);
-			drawSurface.DrawImage(image, x, y, width, height);
-		}
 
+			drawSurface.DrawImage(image, 0, 0, width, height);
+		}
 	}
 }

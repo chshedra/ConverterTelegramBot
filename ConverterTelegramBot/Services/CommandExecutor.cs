@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConverterTelegramBot.Commands;
+using ConverterTelegramBot.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -43,7 +44,7 @@ namespace ConverterTelegramBot.Services
 			{
 				switch (update.Message?.Text)
 				{
-					case "Конвертировать текст в PDF":
+					case CommandText.ConvertMessage:
 					{
 						await ExecuteCommand("GetTextCommand", update);
 						return;
