@@ -9,15 +9,23 @@ using Telegram.Bot.Types.Enums;
 
 namespace ConverterTelegramBot.Services
 {
-	/// <summary>
-	/// Класс управления выполнением команд.
-	/// </summary>
+	/// <inheritdoc/>
 	public class CommandExecutor : ICommandExecutor
 	{
+		/// <summary>
+		/// List of commands
+		/// </summary>
 		private readonly List<ICommand> _commands;
 
+		/// <summary>
+		/// Object of last executed command
+		/// </summary>
 		private ICommand _lastCommand;
 
+		/// <summary>
+		/// Create instance of service
+		/// </summary>
+		/// <param name="serviceProvider">Creating commands service</param>
 		public CommandExecutor(IServiceProvider serviceProvider)
 		{
 			_commands = serviceProvider.GetServices<ICommand>().ToList();
@@ -62,6 +70,9 @@ namespace ConverterTelegramBot.Services
 			}
 		}
 
+		/// <summary>
+		/// Execute definite command async
+		/// </summary>
 		private async Task ExecuteCommand(string commandName, Update update)
 		{
 			_lastCommand = _commands.First(x => x.Name == commandName);

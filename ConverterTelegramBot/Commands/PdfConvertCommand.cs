@@ -7,6 +7,9 @@ using Telegram.Bot.Types.Enums;
 
 namespace ConverterTelegramBot.Commands
 {
+	/// <summary>
+	/// Converting to PDF command
+	/// </summary>
 	public class PdfConvertCommand : ICommand
 	{
 		private readonly IUserService _userService;
@@ -15,8 +18,15 @@ namespace ConverterTelegramBot.Commands
 
 		private readonly IChatDataProvider _dataProvider;
 
+		/// <inheritdoc/>
 		public string Name => "PdfConvertCommand";
 
+		/// <summary>
+		/// Create instance of converting to PDF command
+		/// </summary>
+		/// <param name="userService">Getting user info service</param>
+		/// <param name="bot">Getting bot client service</param>
+		/// <param name="dataProvider">Getting chat data service</param>
 		public PdfConvertCommand(IUserService userService, Bot bot, IChatDataProvider dataProvider)
 		{
 			_userService = userService;
@@ -24,6 +34,7 @@ namespace ConverterTelegramBot.Commands
 			_dataProvider = dataProvider;
 		}
 
+		/// <inheritdoc/>
 		public async Task ExecuteAsync(Update update)
 		{
 			var user = _userService.GetUser(update).Result;
@@ -38,8 +49,7 @@ namespace ConverterTelegramBot.Commands
 				}
 				case MessageType.Photo:
 				{
-					var fileId = 
-						update.Message?.Photo[update.Message.Photo.Length - 1].FileId;
+					var fileId = GetFileID(update);
 
 					fileBytes = await _dataProvider.GetPdfBytes(_botClient, fileId);
 					break;
@@ -48,5 +58,8 @@ namespace ConverterTelegramBot.Commands
 			
 			_dataProvider.SendPdfFile(_botClient, user.ChatId, fileBytes);
 		}
+
+		private string GetFileID(Update update) 
+			=> update.Message?.Photo[update.Message.Photo.Length - 1].FileId;
 	}
 }
