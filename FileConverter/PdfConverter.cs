@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using PdfSharp.Drawing;
@@ -21,13 +20,21 @@ namespace FileHandler
 		{
 			var stream = new MemoryStream();
 			var document = new Document();
-			Section section = document.AddSection();
+			var section = document.AddSection();
 			var paragraph = new Paragraph();
-			paragraph.AddText(text);
+			var font = new Font()
+			{
+				Size = 14,
+			};
+
+			paragraph.AddFormattedText(text, font);
 			section.Add(paragraph);
 
-			var pdfRenderer = new PdfDocumentRenderer(true, PdfFontEmbedding.Always);
-			pdfRenderer.Document = document;
+			var pdfRenderer = new PdfDocumentRenderer(true)
+			{
+				Document = document
+			};
+
 			pdfRenderer.RenderDocument();
 			pdfRenderer.PdfDocument.Save(stream);
 
@@ -42,9 +49,9 @@ namespace FileHandler
 		public static byte[] ConvertToPdf(MemoryStream imageStream)
 		{
 			var document = new PdfDocument();
-			PdfPage page = document.AddPage();
+			var page = document.AddPage();
 
-			XGraphics drawSurface = XGraphics.FromPdfPage(page);
+			var drawSurface = XGraphics.FromPdfPage(page);
 
 			DrawImage(drawSurface, imageStream, page.Width.Point, page.Height.Point);
 
@@ -59,8 +66,8 @@ namespace FileHandler
 		/// </summary>
 		/// <param name="drawSurface">Drawing surface</param>
 		/// <param name="stream">Stream with image</param>
-		/// <param name="x">XCoordinate</param>
-		/// <param name="y">YCoordinate</param>
+		/// <param name="width">Image width</param>
+		/// <param name="height">Image height</param>
 		private static void DrawImage(XGraphics drawSurface, MemoryStream stream, 
 			double width, double height)
 		{
