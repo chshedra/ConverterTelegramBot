@@ -2,6 +2,8 @@
 using System.Collections;
 using FileHandler;
 using System.IO;
+using System.Text;
+using System;
 
 namespace UnitTests
 {
@@ -9,28 +11,53 @@ namespace UnitTests
 	internal class PdfConverterTests
 	{
 		[TestCaseSource(nameof(ConvertTextData))]
-		public void ConvertToPdfTest(string inputText)
+		public void ConvertTextToPdfTest(string inputText, byte[] expectedBytes)
 		{
 			//Arrange & Act
-			byte[] actualBytes = new byte[0];
-			try
-			{
-				actualBytes = PdfConverter.ConvertToPdf(inputText);
-			}
-			catch
-			{
+			byte[] actualBytes = PdfConverter.ConvertToPdf(inputText);
 
-			}
-
-			File.WriteAllBytes("ExpectedBytes.txt", actualBytes);
+			//Assert
 			Assert.IsNotNull(actualBytes);
+			Assert.AreEqual(expectedBytes.Length, actualBytes.Length);
 		}
 
-		public static IEnumerable ConvertTextData
+		[TestCaseSource(nameof(ConvertImageData))]
+		public void ConvertImageToPdfTest(byte[] imageBytes, byte[] expectedBytes)
+		{
+			//Arrange
+			byte[] actualBytes;
+
+			//Act
+			using (var imageStream = new MemoryStream(imageBytes))
+			{
+				actualBytes = PdfConverter.ConvertToPdf(imageStream);
+			}
+
+			//Assert
+			Assert.IsNotNull(actualBytes);
+			Assert.AreEqual(expectedBytes.Length, expectedBytes.Length);
+		}
+
+		private static IEnumerable ConvertTextData
 		{
 			get
 			{
-				yield return "TestText";
+				yield return new TestCaseData("Тетстовый текст",
+					TestManager.GetBytes(TestManager.ExpectedCyrillicPdfPath));
+				yield return new TestCaseData("TestText",
+					TestManager.GetBytes(TestManager.ExpectedLatinPdfPath));
+				yield return new TestCaseData(string.Empty,
+					TestManager.GetBytes(TestManager.ExpectedEmptyPdfPath));
+
+			}
+		}
+
+		private static IEnumerable ConvertImageData
+		{
+			get
+			{
+				yield return new TestCaseData(TestManager.GetBytes(TestManager.SourceTestImagePath), 
+					TestManager.GetBytes(TestManager.ExpectedImageBytesPath));
 			}
 		}
 	}

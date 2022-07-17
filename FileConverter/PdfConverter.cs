@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using PdfSharp.Drawing;
@@ -18,6 +19,7 @@ namespace FileHandler
 		/// <returns>Pdf bytes</returns>
 		public static byte[] ConvertToPdf(string text)
 		{
+			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 			var stream = new MemoryStream();
 			var document = new Document();
 			var section = document.AddSection();
@@ -48,6 +50,7 @@ namespace FileHandler
 		/// <returns>Pdf bytes</returns>
 		public static byte[] ConvertToPdf(MemoryStream imageStream)
 		{
+			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 			var document = new PdfDocument();
 			var page = document.AddPage();
 
