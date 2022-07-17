@@ -16,15 +16,15 @@ namespace ConverterTelegramBot.Services
 		/// <inheritdoc/>
 		public async void SendPdfFile(TelegramBotClient botClient, long chatId, byte[] fileBytes)
 		{
-			using (var fs = new FileStream("temp.pdf", FileMode.Create))
+			using (var stream = new FileStream("temp.pdf", FileMode.Create))
 			{
-				foreach (var bt in fileBytes)
+				foreach (var fileByte in fileBytes)
 				{
-					fs.WriteByte(bt);
+					stream.WriteByte(fileByte);
 				}
 
-				fs.Seek(0, SeekOrigin.Begin);
-				var document = new InputOnlineFile(fs, "file.pdf");
+				stream.Seek(0, SeekOrigin.Begin);
+				var document = new InputOnlineFile(stream, "file.pdf");
 				await botClient.SendDocumentAsync(chatId, document);
 			}
 		}
