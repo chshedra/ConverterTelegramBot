@@ -1,8 +1,8 @@
-﻿version: '3.4'
+﻿version: '3.9'
 
 networks:
   dockerapi-dev:
-    driver: bridge 
+    driver: bridge
 
 services:
   dockerapi:
@@ -13,12 +13,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8000:80"     
+      - "8000:80"
     environment:
       DB_CONNECTION_STRING: "host=postgres_image;port=5432;database=botdb;username=shchedra;password=shchedra"
     networks:
-      - dockerapi-dev  
-  
+      - telegram-bot
+
   postgres_image:
     image: postgres:latest
     ports:
@@ -27,11 +27,7 @@ services:
     volumes:
       - db_volume:/var/lib/postgresql/data
       - ./dbscripts/seed.sql :/docker-entrypoint-initdb.d/seed.sql
-    environment:
-      POSTGRES_USER: "bloguser"
-      POSTGRES_PASSWORD: "bloguser"
-      POSTGRES_DB: "blogdb"
     networks:
-      - dockerapi-dev
+      - telegram-bot
 volumes:
   db_volume:
