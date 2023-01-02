@@ -1,49 +1,45 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
-namespace ConverterTelegramBot.Controllers
-{ 
-	[ApiController]
-	[Route("api/message")]
-	public class BotController : ControllerBase
-	{
-		private readonly ICommandExecutor _commandExecutor;
+namespace ConverterTelegramBot.Controllers;
 
-		public BotController(ICommandExecutor commandExecutor)
-		{
-			_commandExecutor = commandExecutor;
-		}
+[ApiController]
+[Route("api/message")]
+public class BotController : ControllerBase
+{
+    private readonly ICommandExecutor _commandExecutor;
 
-		[HttpPost]
-		[Route("update")]
-		public async Task<IActionResult> Update([FromBody] object update)
-		{
-			var upd = JsonConvert.DeserializeObject<Update>(update.ToString());
+    public BotController(ICommandExecutor commandExecutor)
+    {
+        _commandExecutor = commandExecutor;
+    }
 
-			var chat = upd.Message?.Chat;
+    [HttpPost]
+    [Route("update")]
+    public async Task<IActionResult> Update([FromBody] object update)
+    {
+        var upd = JsonConvert.DeserializeObject<Update>(update.ToString());
 
-			if (chat == null)
-			{
-				return Ok();
-			}
+        var chat = upd.Message?.Chat;
 
-			try
-			{
-				await _commandExecutor.Execute(upd);
-			}
-			catch (Exception ex)
-			{
-				return Ok();
-			}
+        if (chat == null)
+        {
+            return Ok();
+        }
 
-			return Ok();
-		}
-	}
+        try
+        {
+            await _commandExecutor.Execute(upd);
+        }
+        catch (Exception ex)
+        {
+            return Ok();
+        }
+
+        return Ok();
+    }
 }

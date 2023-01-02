@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ConverterTelegramBot.Models
+namespace ConverterTelegramBot.Models;
+
+/// <summary>
+/// Bot database context
+/// </summary>
+public class BotDbContext : DbContext
 {
-	/// <summary>
-	/// Bot database context
-	/// </summary>
-	public class BotDbContext : DbContext
-	{
-		public BotDbContext(DbContextOptions<BotDbContext> options) : base(options) { }
+    public BotDbContext(DbContextOptions<BotDbContext> options) : base(options) { }
 
-		public DbSet<BotUserEntity> Users { get; set; }
-
-	}
+    public DbSet<BotUserEntity> Users { get; set; }
 }
