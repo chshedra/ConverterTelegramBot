@@ -21,12 +21,14 @@ namespace ConverterTelegramBot
 
 		public IConfiguration Configuration { get; }
 
-		public void ConfigureServices(IServiceCollection services)
+		public void ConfigureServices( IServiceCollection services)
 		{
 			services.AddControllers();
 			services.AddDbContext<BotDbContext>(opt =>
-				opt.UseSqlServer(Configuration.GetConnectionString("BotConnection")), ServiceLifetime.Singleton);
-			services.AddSingleton<Bot>();
+				opt.UseNpgsql(Configuration.GetConnectionString("BotConnection")), ServiceLifetime.Singleton);
+
+
+            services.AddSingleton<Bot>();
 			services.AddSingleton<ICommandExecutor, CommandExecutor>();
 			services.AddSingleton<IUserService, UserService>();
 			services.AddSingleton<ICommand, StartCommand>();
@@ -37,7 +39,12 @@ namespace ConverterTelegramBot
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
 		{
-			if (env.IsDevelopment())
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<BotDbContext>();
+                context.Database.EnsureCreated();
+            }
+            if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
