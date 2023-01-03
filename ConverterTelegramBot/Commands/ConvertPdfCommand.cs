@@ -48,13 +48,6 @@ public class ConvertPdfCommand : ICommand
                 fileBytes = await _dataProvider.GetPdfBytes(update.Message?.Text);
                 break;
             }
-            case MessageType.Photo:
-            {
-                var fileId = GetFileID(update);
-
-                fileBytes = await _dataProvider.GetPdfBytes(_botClient, fileId);
-                break;
-            }
             default:
             {
                 _dataProvider.SendMessage(

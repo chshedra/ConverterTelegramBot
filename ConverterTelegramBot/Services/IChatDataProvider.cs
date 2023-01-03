@@ -19,12 +19,6 @@ public interface IChatDataProvider
     void SendPdfFile(TelegramBotClient botClient, long chatId, byte[] fileBytes);
 
     /// <summary>
-    /// Get bytes of converted image pdf
-    /// </summary>
-    /// <returns>Bytes of pdf file</returns>
-    Task<byte[]> GetPdfBytes(TelegramBotClient botClient, string fileId);
-
-    /// <summary>
     /// Get bytes of converted string pdf
     /// </summary>
     /// <returns>Bytes of pdf file</returns>

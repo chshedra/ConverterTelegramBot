@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using PdfSharpCore.Drawing;
+using PdfSharpCore.Fonts;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Utils;
+using System.IO;
 using System.Text;
-using MigraDoc.DocumentObjectModel;
-using MigraDoc.Rendering;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
 
 namespace FileHandler;
 
@@ -19,61 +19,21 @@ public class PdfConverter
     /// <returns>Pdf bytes</returns>
     public static byte[] ConvertToPdf(string text)
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        var stream = new MemoryStream();
-        var document = new Document();
-        var section = document.AddSection();
-        var paragraph = new Paragraph();
-        var font = new Font() { Size = 14, };
-
-        paragraph.AddFormattedText(text, font);
-        section.Add(paragraph);
-
-        var pdfRenderer = new PdfDocumentRenderer(true) { Document = document };
-
-        pdfRenderer.RenderDocument();
-        pdfRenderer.PdfDocument.Save(stream);
-
-        return stream.ToArray();
-    }
-
-    /// <summary>
-    /// Convert image to pdf bytes
-    /// </summary>
-    /// <param name="imageStream">Image stream</param>
-    /// <returns>Pdf bytes</returns>
-    public static byte[] ConvertToPdf(MemoryStream imageStream)
-    {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var document = new PdfDocument();
         var page = document.AddPage();
 
-        var drawSurface = XGraphics.FromPdfPage(page);
+        var gfx = XGraphics.FromPdfPage(page);
+        var font = new XFont("Arial", 14, XFontStyle.Regular);
 
-        DrawImage(drawSurface, imageStream, page.Width.Point, page.Height.Point);
+        var textColor = XBrushes.Black;
+        var layout = new XRect(5, 5, page.Width, page.Height);
+        var format = XStringFormats.Center;
 
-        var pdfStream = new MemoryStream();
-        document.Save(pdfStream);
+        gfx.DrawString(text, font, textColor, layout, format);
 
-        return pdfStream.ToArray();
-    }
+        var stream = new MemoryStream();
+        document.Save(stream);
 
-    /// <summary>
-    /// Draw image on surface
-    /// </summary>
-    /// <param name="drawSurface">Drawing surface</param>
-    /// <param name="stream">Stream with image</param>
-    /// <param name="width">Image width</param>
-    /// <param name="height">Image height</param>
-    private static void DrawImage(
-        XGraphics drawSurface,
-        MemoryStream stream,
-        double width,
-        double height
-    )
-    {
-        var image = XImage.FromStream(stream);
-
-        drawSurface.DrawImage(image, 0, 0, width, height);
+        return stream.ToArray();
     }
 }

@@ -30,22 +30,6 @@ public class ChatDataProvider : IChatDataProvider
     }
 
     /// <inheritdoc/>
-    public async Task<byte[]> GetPdfBytes(TelegramBotClient botClient, string fileId)
-    {
-        var image = await botClient.GetFileAsync(fileId);
-        byte[] fileBytes;
-        MemoryStream memoryStream;
-
-        using (memoryStream = new MemoryStream())
-        {
-            await botClient.DownloadFileAsync(image.FilePath, memoryStream);
-            fileBytes = FileHandler.PdfConverter.ConvertToPdf(memoryStream);
-        }
-
-        return fileBytes;
-    }
-
-    /// <inheritdoc/>
     public async Task<byte[]> GetPdfBytes(string text) =>
         await Task.FromResult(FileHandler.PdfConverter.ConvertToPdf(text));
 }
