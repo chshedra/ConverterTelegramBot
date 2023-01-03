@@ -1,23 +1,20 @@
 ﻿using PdfSharpCore.Drawing;
-using PdfSharpCore.Fonts;
 using PdfSharpCore.Pdf;
-using PdfSharpCore.Utils;
 using System.IO;
-using System.Text;
 
 namespace FileHandler;
 
 /// <summary>
 /// Convert input data to pdf
 /// </summary>
-public class PdfConverter
+public class PdfConverter : IPdfConverter
 {
     /// <summary>
     /// Convert text to pdf bytes
     /// </summary>
     /// <param name="text">Input text</param>
     /// <returns>Pdf bytes</returns>
-    public static byte[] ConvertToPdf(string text)
+    public byte[] ConvertToPdf(string text)
     {
         var document = new PdfDocument();
         var page = document.AddPage();

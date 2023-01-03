@@ -2,6 +2,7 @@ using System;
 using ConverterTelegramBot.Commands;
 using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
+using FileHandler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace ConverterTelegramBot
             services.AddSingleton<ICommand, GetTextCommand>();
             services.AddSingleton<ICommand, ConvertPdfCommand>();
             services.AddSingleton<IChatDataProvider, ChatDataProvider>();
+            services.AddSingleton<IPdfConverter, PdfConverter>();
         }
 
         public void Configure(

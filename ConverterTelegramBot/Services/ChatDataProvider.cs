@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using FileHandler;
+using System.IO;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types.InputFiles;
@@ -8,6 +9,13 @@ namespace ConverterTelegramBot.Services;
 /// <inheritdoc/>
 public class ChatDataProvider : IChatDataProvider
 {
+    private readonly IPdfConverter _pdfConverter;
+
+    public ChatDataProvider(IPdfConverter pdfConverter)
+    {
+        _pdfConverter = pdfConverter;
+    }
+
     public async void SendMessage(TelegramBotClient botClient, long chatId, string message)
     {
         await botClient.SendTextMessageAsync(chatId, message);
@@ -31,5 +39,5 @@ public class ChatDataProvider : IChatDataProvider
 
     /// <inheritdoc/>
     public async Task<byte[]> GetPdfBytes(string text) =>
-        await Task.FromResult(FileHandler.PdfConverter.ConvertToPdf(text));
+        await Task.FromResult(_pdfConverter.ConvertToPdf(text));
 }

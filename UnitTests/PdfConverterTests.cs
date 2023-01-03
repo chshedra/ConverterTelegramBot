@@ -10,11 +10,18 @@ namespace UnitTests
     [TestFixture]
     internal class PdfConverterTests
     {
+        private readonly IPdfConverter _converter;
+
+        public PdfConverterTests(IPdfConverter pdfConverter)
+        {
+            _converter = pdfConverter;
+        }
+
         [TestCaseSource(nameof(ConvertTextData))]
         public void ConvertTextToPdfTest(string inputText, byte[] expectedBytes)
         {
             //Arrange & Act
-            byte[] actualBytes = PdfConverter.ConvertToPdf(inputText);
+            byte[] actualBytes = _converter.ConvertToPdf(inputText);
 
             //Assert
             Assert.IsNotNull(actualBytes);
