@@ -38,7 +38,14 @@ public class StartCommand : ICommand
         var user = await _userService.GetUser(update);
 
         var inlineKeyboard = new ReplyKeyboardMarkup(
-            new[] { new[] { new KeyboardButton(CommandText.ConvertMessage) } }
+            new[]
+            {
+                new[]
+                {
+                    new KeyboardButton(CommandText.ConvertMessage),
+                    new KeyboardButton(CommandText.SeparateMessage)
+                }
+            }
         );
 
         await _botClient.SendTextMessageAsync(

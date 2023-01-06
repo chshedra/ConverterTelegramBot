@@ -2,6 +2,7 @@
 using ConverterTelegramBot.Infrastructure;
 using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
+using FileHandler;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -38,7 +39,7 @@ public class ConvertPdfCommand : ICommand
     /// <inheritdoc/>
     public async Task ExecuteAsync(Update update)
     {
-        var user = _userService.GetUser(update).Result;
+        var user = await _userService.GetUser(update);
         byte[] fileBytes = default;
 
         switch (update.Message?.Type)

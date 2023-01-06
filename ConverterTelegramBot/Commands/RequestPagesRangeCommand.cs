@@ -1,20 +1,21 @@
-﻿using System.Threading.Tasks;
-using ConverterTelegramBot.Models;
+﻿using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace ConverterTelegramBot.Commands;
 
-public class GetTextCommand : ICommand
+public class RequestPagesRangeCommand : ICommand
 {
     private readonly TelegramBotClient _botClient;
 
     private readonly IUserService _userService;
-    public string Name => "GetTextCommand";
 
-    public GetTextCommand(IUserService userService, Bot bot)
+    public string Name => "RequestPagesRangeCommand";
+
+    public RequestPagesRangeCommand(IUserService userService, Bot bot)
     {
         _userService = userService;
         _botClient = bot.GetBot().Result;
@@ -26,7 +27,7 @@ public class GetTextCommand : ICommand
 
         await _botClient.SendTextMessageAsync(
             user.ChatId,
-            "Отправьте текст или изображение для конвертации",
+            "Введите первую и последнюю страницу диапазона через пробел",
             ParseMode.Markdown
         );
     }

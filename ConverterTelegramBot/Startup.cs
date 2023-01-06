@@ -29,14 +29,17 @@ namespace ConverterTelegramBot
                 ServiceLifetime.Singleton
             );
 
+            services.AddSingleton<IPdfConverter, PdfConverter>();
             services.AddSingleton<Bot>();
             services.AddSingleton<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ICommand, StartCommand>();
             services.AddSingleton<ICommand, GetTextCommand>();
             services.AddSingleton<ICommand, ConvertPdfCommand>();
+            services.AddSingleton<ICommand, RequestFileCommand>();
+            services.AddSingleton<ICommand, RequestPagesRangeCommand>();
+            services.AddSingleton<ICommand, SeparatePdfCommand>();
             services.AddSingleton<IChatDataProvider, ChatDataProvider>();
-            services.AddSingleton<IPdfConverter, PdfConverter>();
         }
 
         public void Configure(

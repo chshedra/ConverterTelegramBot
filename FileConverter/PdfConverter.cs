@@ -1,6 +1,9 @@
 ﻿using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
+using PdfSharpCore.Pdf.IO;
+using System.Data;
 using System.IO;
+using System.Linq;
 
 namespace FileHandler;
 
@@ -32,5 +35,29 @@ public class PdfConverter : IPdfConverter
         document.Save(stream);
 
         return stream.ToArray();
+    }
+
+    public byte[] SeparateFile(byte[] defaultFileBytes, int fromPage, int toPage)
+    {
+        PdfDocument document = new PdfDocument();
+
+        using (var stream = new MemoryStream(defaultFileBytes))
+        {
+            document = PdfReader.Open(stream, PdfDocumentOpenMode.Import);
+        }
+
+        var separatedPages = document.Pages.PagesArray.ToList().GetRange(fromPage, toPage);
+
+        var separatedDocument = new PdfDocument();
+        separatedDocument.Pages.InsertRange(0, document, 0, 1);
+
+        byte[] separatedDocumentBytes = new byte[0];
+        using (var stream = new MemoryStream())
+        {
+            separatedDocument.Save(stream);
+            separatedDocumentBytes = stream.ToArray();
+        }
+
+        return separatedDocumentBytes;
     }
 }

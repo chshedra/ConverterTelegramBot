@@ -7,5 +7,9 @@ public static class CommandText
 
     public const string ConvertMessage = "Конвертировать в PDF";
 
+    public const string SeparateMessage = "Разделить PDF";
+
     public const string CommandChoiceMessage = "Выберите необходимое действие";
+
+    public const string SeparateFileMessage = "Введите диапазон страниц";
 }

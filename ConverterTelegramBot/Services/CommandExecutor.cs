@@ -49,6 +49,11 @@ public class CommandExecutor : ICommandExecutor
                     await ExecuteCommand("GetTextCommand", update);
                     return;
                 }
+                case CommandText.SeparateMessage:
+                {
+                    await ExecuteCommand("RequestFileCommand", update);
+                    return;
+                }
             }
         }
 
@@ -64,10 +69,14 @@ public class CommandExecutor : ICommandExecutor
 
         switch (_lastCommand?.Name)
         {
-            case "GetTextCommand":
+            case "RequestFileCommand":
             {
-                await ExecuteCommand("PdfConvertCommand", update);
-                await ExecuteCommand("StartCommand", update);
+                await ExecuteCommand("RequestPagesRangeCommand", update);
+                break;
+            }
+            case "RequestPagesRangeCommand":
+            {
+                await ExecuteCommand("SeparateCommand", update);
                 break;
             }
         }
