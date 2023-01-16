@@ -33,7 +33,7 @@ public class SeparatePdfCommand : ICommand
         _chatDataProvider = chatDataProvider;
     }
 
-    public string Name => "SeparateCommand";
+    public string Name => CommandName.SeparateCommandName;
 
     public async Task ExecuteAsync(Update update)
     {

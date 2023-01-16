@@ -13,7 +13,7 @@ public class RequestPagesRangeCommand : ICommand
 
     private readonly IUserService _userService;
 
-    public string Name => "RequestPagesRangeCommand";
+    public string Name => CommandName.RequestPagesCommandName;
 
     public RequestPagesRangeCommand(IUserService userService, Bot bot)
     {

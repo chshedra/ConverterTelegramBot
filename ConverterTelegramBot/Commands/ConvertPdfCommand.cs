@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using ConverterTelegramBot.Infrastructure;
 using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
 using FileHandler;
@@ -21,7 +20,7 @@ public class ConvertPdfCommand : ICommand
     private readonly IChatDataProvider _dataProvider;
 
     /// <inheritdoc/>
-    public string Name => "PdfConvertCommand";
+    public string Name => CommandName.ConvertPdfCommandName;
 
     /// <summary>
     /// Create instance of converting to PDF command
@@ -54,7 +53,7 @@ public class ConvertPdfCommand : ICommand
                 _dataProvider.SendMessage(
                     _botClient,
                     user.ChatId,
-                    CommandText.UnsupportedFileMessage
+                    CommandMessage.UnsupportedFileMessage
                 );
                 break;
             }

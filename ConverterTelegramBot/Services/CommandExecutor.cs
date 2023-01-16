@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConverterTelegramBot.Commands;
-using ConverterTelegramBot.Infrastructure;
+using ConverterTelegramBot.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Update = Telegram.Bot.Types.Update;
 
 namespace ConverterTelegramBot.Services;
 
@@ -18,6 +20,8 @@ public class CommandExecutor : ICommandExecutor
     /// </summary>
     private readonly List<ICommand> _commands;
 
+    private readonly BotDbContext _context;
+
     /// <summary>
     /// Object of last executed command
     /// </summary>
@@ -27,9 +31,10 @@ public class CommandExecutor : ICommandExecutor
     /// Create instance of service
     /// </summary>
     /// <param name="serviceProvider">Creating commands service</param>
-    public CommandExecutor(IServiceProvider serviceProvider)
+    public CommandExecutor(IServiceProvider serviceProvider, BotDbContext context)
     {
         _commands = serviceProvider.GetServices<ICommand>().ToList();
+        _context = context;
     }
 
     /// <inheritdoc/>
@@ -44,12 +49,12 @@ public class CommandExecutor : ICommandExecutor
         {
             switch (update.Message?.Text)
             {
-                case CommandText.ConvertMessage:
+                case CommandMessage.ConvertMessage:
                 {
-                    await ExecuteCommand("GetTextCommand", update);
+                    await ExecuteCommand(CommandName.GetTextCommandName, update);
                     return;
                 }
-                case CommandText.SeparateMessage:
+                case CommandMessage.SeparateMessage:
                 {
                     await ExecuteCommand("RequestFileCommand", update);
                     return;
@@ -63,20 +68,20 @@ public class CommandExecutor : ICommandExecutor
             && update.Message.Text.Contains("/start")
         )
         {
-            await ExecuteCommand("StartCommand", update);
+            await ExecuteCommand(CommandName.StartCommandName, update);
             return;
         }
 
         switch (_lastCommand?.Name)
         {
-            case "RequestFileCommand":
+            case CommandName.RequestFileCommandName:
             {
-                await ExecuteCommand("RequestPagesRangeCommand", update);
+                await ExecuteCommand(CommandName.RequestPagesCommandName, update);
                 break;
             }
-            case "RequestPagesRangeCommand":
+            case CommandName.RequestPagesCommandName:
             {
-                await ExecuteCommand("SeparateCommand", update);
+                await ExecuteCommand(CommandName.SeparateCommandName, update);
                 break;
             }
         }

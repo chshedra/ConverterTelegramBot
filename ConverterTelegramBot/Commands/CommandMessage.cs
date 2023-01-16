@@ -1,6 +1,6 @@
-﻿namespace ConverterTelegramBot.Infrastructure;
+﻿namespace ConverterTelegramBot.Commands;
 
-public static class CommandText
+public static class CommandMessage
 {
     public const string UnsupportedFileMessage =
         "Неподдерживаемый формат файла. Бот умеет конвертировать текст и изображения";

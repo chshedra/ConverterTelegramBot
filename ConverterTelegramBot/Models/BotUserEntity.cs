@@ -9,4 +9,6 @@ public class BotUserEntity : BaseEntity
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
+
+    public string LastDocument { get; set; }
 }

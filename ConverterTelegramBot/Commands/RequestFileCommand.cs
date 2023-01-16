@@ -12,7 +12,7 @@ public class RequestFileCommand : ICommand
     private readonly TelegramBotClient _botClient;
 
     private readonly IUserService _userService;
-    public string Name => "RequestFileCommand";
+    public string Name => CommandName.RequestFileCommandName;
 
     public RequestFileCommand(IUserService userService, Bot bot)
     {

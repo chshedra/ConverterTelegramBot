@@ -19,6 +19,7 @@
     <ProjectReference Include="..\FileConverter\FileHandler.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Infrastructure\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

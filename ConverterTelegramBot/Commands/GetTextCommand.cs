@@ -12,7 +12,7 @@ public class GetTextCommand : ICommand
     private readonly TelegramBotClient _botClient;
 
     private readonly IUserService _userService;
-    public string Name => "GetTextCommand";
+    public string Name => CommandName.GetTextCommandName;
 
     public GetTextCommand(IUserService userService, Bot bot)
     {

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using ConverterTelegramBot.Infrastructure;
 using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
 using Telegram.Bot;
@@ -19,7 +18,7 @@ public class StartCommand : ICommand
     private readonly TelegramBotClient _botClient;
 
     /// <inheritdoc/>
-    public string Name => "StartCommand";
+    public string Name => CommandName.StartCommandName;
 
     /// <summary>
     /// Create instance of start command
@@ -42,15 +41,15 @@ public class StartCommand : ICommand
             {
                 new[]
                 {
-                    new KeyboardButton(CommandText.ConvertMessage),
-                    new KeyboardButton(CommandText.SeparateMessage)
+                    new KeyboardButton(CommandMessage.ConvertMessage),
+                    new KeyboardButton(CommandMessage.SeparateMessage)
                 }
             }
         );
 
         await _botClient.SendTextMessageAsync(
             user.ChatId,
-            CommandText.CommandChoiceMessage,
+            CommandMessage.CommandChoiceMessage,
             ParseMode.Markdown,
             replyMarkup: inlineKeyboard
         );
