@@ -23,4 +23,6 @@ public interface IChatDataProvider
     /// </summary>
     /// <returns>Bytes of pdf file</returns>
     Task<byte[]> GetPdfBytes(string text);
+
+    Task SaveFile(string fileId, long chatId);
 }

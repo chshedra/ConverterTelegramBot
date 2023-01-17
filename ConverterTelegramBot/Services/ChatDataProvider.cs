@@ -1,4 +1,7 @@
-﻿using FileHandler;
+﻿using ConverterTelegramBot.Models;
+using FileHandler;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -11,14 +14,20 @@ public class ChatDataProvider : IChatDataProvider
 {
     private readonly IPdfConverter _pdfConverter;
 
-    public ChatDataProvider(IPdfConverter pdfConverter)
+    private readonly TelegramBotClient _botClient;
+
+    private readonly BotDbContext _dbContext;
+
+    public ChatDataProvider(IPdfConverter pdfConverter, Bot bot, BotDbContext dbContext)
     {
         _pdfConverter = pdfConverter;
+        _dbContext = dbContext;
+        _botClient = bot.GetBot().Result;
     }
 
     public async void SendMessage(TelegramBotClient botClient, long chatId, string message)
     {
-        await botClient.SendTextMessageAsync(chatId, message);
+        await _botClient.SendTextMessageAsync(chatId, message);
     }
 
     /// <inheritdoc/>
@@ -35,6 +44,23 @@ public class ChatDataProvider : IChatDataProvider
             var document = new InputOnlineFile(stream, "file.pdf");
             await botClient.SendDocumentAsync(chatId, document);
         }
+    }
+
+    public async Task SaveFile(string fileId, long chatId)
+    {
+        var file = await _botClient.GetFileAsync(fileId);
+
+        byte[] fileBytes = new byte[0];
+        using (var stream = new MemoryStream())
+        {
+            await _botClient.DownloadFileAsync(file.FilePath, stream);
+            fileBytes = stream.ToArray();
+        }
+
+        var user = await _dbContext.Users.FirstAsync(u => u.ChatId == chatId);
+        user.LastDocument = Convert.ToBase64String(fileBytes);
+        _dbContext.Update(user);
+        _dbContext.SaveChanges();
     }
 
     /// <inheritdoc/>

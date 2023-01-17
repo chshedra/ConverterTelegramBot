@@ -20,6 +20,8 @@ public class CommandExecutor : ICommandExecutor
     /// </summary>
     private readonly List<ICommand> _commands;
 
+    private readonly IChatDataProvider _chatDataProvider;
+
     private readonly BotDbContext _context;
 
     /// <summary>
@@ -31,9 +33,14 @@ public class CommandExecutor : ICommandExecutor
     /// Create instance of service
     /// </summary>
     /// <param name="serviceProvider">Creating commands service</param>
-    public CommandExecutor(IServiceProvider serviceProvider, BotDbContext context)
+    public CommandExecutor(
+        IServiceProvider serviceProvider,
+        IChatDataProvider chatDataProvider,
+        BotDbContext context
+    )
     {
         _commands = serviceProvider.GetServices<ICommand>().ToList();
+        _chatDataProvider = chatDataProvider;
         _context = context;
     }
 
@@ -76,6 +83,10 @@ public class CommandExecutor : ICommandExecutor
         {
             case CommandName.RequestFileCommandName:
             {
+                await _chatDataProvider.SaveFile(
+                    update.Message.Document.FileId,
+                    update.Message.Chat.Id
+                );
                 await ExecuteCommand(CommandName.RequestPagesCommandName, update);
                 break;
             }
