@@ -1,9 +1,7 @@
 ﻿using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
-using System.Data;
 using System.IO;
-using System.Linq;
 
 namespace FileHandler;
 
