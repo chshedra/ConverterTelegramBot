@@ -1,6 +1,7 @@
 ﻿using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
 using FileHandler;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,17 +40,8 @@ public class SeparatePdfCommand : ICommand
     {
         var user = await _userService.GetUser(update);
 
-        var fileId = update.Message?.Document.FileId;
-        var fileInfo = await _botClient.GetFileAsync(fileId);
-
-        byte[] fileBytes;
-        using (var stream = new MemoryStream())
-        {
-            await _botClient.DownloadFileAsync(fileInfo.FilePath, stream);
-            fileBytes = stream.ToArray();
-        }
-
         var range = GetPagesRange(update.Message.Text);
+        var fileBytes = Convert.FromBase64String(user.LastDocument);
         var separatedDocumentBytes = _pdfConverter.SeparateFile(
             fileBytes,
             range.First(),
@@ -61,7 +53,7 @@ public class SeparatePdfCommand : ICommand
     private List<int> GetPagesRange(string rangeMessage)
     {
         var textRange = rangeMessage.Split(' ');
-        var range = textRange.Select(r => int.Parse(r)).ToList();
+        var range = textRange.Select(int.Parse).ToList();
         return range;
     }
 }

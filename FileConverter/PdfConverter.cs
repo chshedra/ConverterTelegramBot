@@ -46,10 +46,10 @@ public class PdfConverter : IPdfConverter
             document = PdfReader.Open(stream, PdfDocumentOpenMode.Import);
         }
 
-        var separatedPages = document.Pages.PagesArray.ToList().GetRange(fromPage, toPage);
-
         var separatedDocument = new PdfDocument();
-        separatedDocument.Pages.InsertRange(0, document, 0, 1);
+        var startPageIndex = fromPage - 1;
+        var pageCount = toPage - fromPage + 1;
+        separatedDocument.Pages.InsertRange(0, document, startPageIndex, pageCount);
 
         byte[] separatedDocumentBytes = new byte[0];
         using (var stream = new MemoryStream())
