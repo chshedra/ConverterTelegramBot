@@ -60,6 +60,7 @@ public class ChatDataProvider : IChatDataProvider
         var user = await _dbContext.Users.FirstAsync(u => u.ChatId == chatId);
         user.LastDocument = Convert.ToBase64String(fileBytes);
         _dbContext.Update(user);
+
         _dbContext.SaveChanges();
     }
 
