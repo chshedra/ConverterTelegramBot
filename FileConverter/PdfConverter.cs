@@ -44,16 +44,35 @@ public class PdfConverter : IPdfConverter
             document = PdfReader.Open(stream, PdfDocumentOpenMode.Import);
         }
 
-        var separatedDocument = new PdfDocument();
-        var startPageIndex = fromPage - 1;
-        var pageCount = toPage - fromPage + 1;
-        separatedDocument.Pages.InsertRange(0, document, startPageIndex, pageCount);
+        if (fromPage > toPage)
+        {
+            throw new FileSeparatingException(
+                $"Value {nameof(fromPage)} must be less than {nameof(toPage)}"
+            );
+        }
+
+        if (document.Pages.Count < toPage || fromPage < 1)
+        {
+            throw new FileSeparatingException("Incorrect pages range");
+        }
 
         byte[] separatedDocumentBytes = new byte[0];
-        using (var stream = new MemoryStream())
+        try
         {
-            separatedDocument.Save(stream);
-            separatedDocumentBytes = stream.ToArray();
+            var separatedDocument = new PdfDocument();
+            var startPageIndex = fromPage - 1;
+            var pageCount = toPage - fromPage + 1;
+            separatedDocument.Pages.InsertRange(0, document, startPageIndex, pageCount);
+
+            using (var stream = new MemoryStream())
+            {
+                separatedDocument.Save(stream);
+                separatedDocumentBytes = stream.ToArray();
+            }
+        }
+        catch
+        {
+            throw new FileSeparatingException("Unable to separate file");
         }
 
         return separatedDocumentBytes;
