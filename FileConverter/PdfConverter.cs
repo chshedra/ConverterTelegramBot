@@ -35,11 +35,18 @@ public class PdfConverter : IPdfConverter
         return stream.ToArray();
     }
 
-    public byte[] SeparateFile(byte[] defaultFileBytes, int fromPage, int toPage)
+    /// <summary>
+    /// Separates apges range from PDF file.
+    /// </summary>
+    /// <param name="fileBytes">Bytes of file for searating.</param>
+    /// <param name="fromPage">First page of separating range.</param>
+    /// <param name="toPage">Last page of separating page.</param>
+    /// <returns>Bytes of separated file.</returns>
+    public byte[] SeparateFile(byte[] fileBytes, int fromPage, int toPage)
     {
         PdfDocument document = new PdfDocument();
 
-        using (var stream = new MemoryStream(defaultFileBytes))
+        using (var stream = new MemoryStream(fileBytes))
         {
             document = PdfReader.Open(stream, PdfDocumentOpenMode.Import);
         }

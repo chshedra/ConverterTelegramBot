@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ConverterTelegramBot.Models;
 using ConverterTelegramBot.Services;
-using FileHandler;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -50,16 +49,12 @@ public class ConvertPdfCommand : ICommand
             }
             default:
             {
-                _dataProvider.SendMessage(
-                    _botClient,
-                    user.ChatId,
-                    CommandMessage.UnsupportedFileMessage
-                );
+                _dataProvider.SendMessage(user.ChatId, CommandMessage.UnsupportedFileMessage);
                 break;
             }
         }
 
-        _dataProvider.SendPdfFile(_botClient, user.ChatId, fileBytes);
+        _dataProvider.SendPdfFile(user.ChatId, fileBytes);
     }
 
     private string GetFileID(Update update) =>

@@ -11,12 +11,12 @@ public interface IChatDataProvider
     /// <summary>
     /// Send text message to user
     /// </summary>
-    void SendMessage(TelegramBotClient botClient, long chatId, string message);
+    void SendMessage(long chatId, string message);
 
     /// <summary>
     /// Send pdf file to user
     /// </summary>
-    void SendPdfFile(TelegramBotClient botClient, long chatId, byte[] fileBytes);
+    void SendPdfFile(long chatId, byte[] fileBytes);
 
     /// <summary>
     /// Get bytes of converted string pdf

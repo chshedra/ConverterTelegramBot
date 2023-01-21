@@ -15,21 +15,17 @@ public class SeparatePdfCommand : ICommand
 {
     private readonly IUserService _userService;
 
-    private readonly TelegramBotClient _botClient;
-
     private readonly IPdfConverter _pdfConverter;
 
     private readonly IChatDataProvider _chatDataProvider;
 
     public SeparatePdfCommand(
         IUserService userService,
-        Bot bot,
         IPdfConverter pdfConverter,
         IChatDataProvider chatDataProvider
     )
     {
         _userService = userService;
-        _botClient = bot.GetBot().Result;
         _pdfConverter = pdfConverter;
         _chatDataProvider = chatDataProvider;
     }
@@ -42,12 +38,22 @@ public class SeparatePdfCommand : ICommand
 
         var range = GetPagesRange(update.Message.Text);
         var fileBytes = Convert.FromBase64String(user.LastDocument);
-        var separatedDocumentBytes = _pdfConverter.SeparateFile(
-            fileBytes,
-            range.First(),
-            range.Last()
-        );
-        _chatDataProvider.SendPdfFile(_botClient, user.ChatId, separatedDocumentBytes);
+        byte[] separatedDocumentBytes = new byte[0];
+
+        try
+        {
+            separatedDocumentBytes = _pdfConverter.SeparateFile(
+                fileBytes,
+                range.First(),
+                range.Last()
+            );
+        }
+        catch
+        {
+            _chatDataProvider.SendMessage(user.ChatId, "Ошибка разделения файла");
+        }
+
+        _chatDataProvider.SendPdfFile(user.ChatId, separatedDocumentBytes);
     }
 
     private List<int> GetPagesRange(string rangeMessage)
