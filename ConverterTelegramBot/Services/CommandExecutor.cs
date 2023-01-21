@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using ConverterTelegramBot.Commands;
 using ConverterTelegramBot.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Update = Telegram.Bot.Types.Update;
 
 namespace ConverterTelegramBot.Services;
@@ -16,21 +14,19 @@ namespace ConverterTelegramBot.Services;
 public class CommandExecutor : ICommandExecutor
 {
     /// <summary>
-    /// List of commands
+    /// List of commands.
     /// </summary>
     private readonly List<ICommand> _commands;
 
     private readonly IChatDataProvider _chatDataProvider;
 
-    private readonly BotDbContext _context;
-
     /// <summary>
-    /// Object of last executed command
+    /// Object of last executed command.
     /// </summary>
     private ICommand _lastCommand;
 
     /// <summary>
-    /// Create instance of service
+    /// Create instance of service.
     /// </summary>
     /// <param name="serviceProvider">Creating commands service</param>
     public CommandExecutor(
@@ -41,7 +37,6 @@ public class CommandExecutor : ICommandExecutor
     {
         _commands = serviceProvider.GetServices<ICommand>().ToList();
         _chatDataProvider = chatDataProvider;
-        _context = context;
     }
 
     /// <inheritdoc/>
@@ -83,10 +78,11 @@ public class CommandExecutor : ICommandExecutor
         {
             case CommandName.RequestFileCommandName:
             {
-                await _chatDataProvider.SaveFile(
+                await _chatDataProvider.SaveFileFromChat(
                     update.Message.Document.FileId,
                     update.Message.Chat.Id
                 );
+
                 await ExecuteCommand(CommandName.RequestPagesCommandName, update);
                 break;
             }
@@ -99,7 +95,7 @@ public class CommandExecutor : ICommandExecutor
     }
 
     /// <summary>
-    /// Execute definite command async
+    /// Executes definite command async.
     /// </summary>
     private async Task ExecuteCommand(string commandName, Update update)
     {

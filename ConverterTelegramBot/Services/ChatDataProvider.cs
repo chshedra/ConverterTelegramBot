@@ -46,7 +46,7 @@ public class ChatDataProvider : IChatDataProvider
         }
     }
 
-    public async Task SaveFile(string fileId, long chatId)
+    public async Task SaveFileFromChat(string fileId, long chatId)
     {
         var file = await _botClient.GetFileAsync(fileId);
 
@@ -63,8 +63,4 @@ public class ChatDataProvider : IChatDataProvider
 
         _dbContext.SaveChanges();
     }
-
-    /// <inheritdoc/>
-    public async Task<byte[]> GetPdfBytes(string text) =>
-        await Task.FromResult(_pdfConverter.ConvertToPdf(text));
 }

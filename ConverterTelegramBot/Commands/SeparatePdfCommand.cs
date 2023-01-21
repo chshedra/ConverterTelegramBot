@@ -3,10 +3,8 @@ using ConverterTelegramBot.Services;
 using FileHandler;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace ConverterTelegramBot.Commands;

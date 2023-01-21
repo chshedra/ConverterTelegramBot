@@ -44,7 +44,6 @@ public class ConvertPdfCommand : ICommand
         {
             case MessageType.Text:
             {
-                fileBytes = await _dataProvider.GetPdfBytes(update.Message?.Text);
                 break;
             }
             default:

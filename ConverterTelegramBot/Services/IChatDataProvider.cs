@@ -18,11 +18,5 @@ public interface IChatDataProvider
     /// </summary>
     void SendPdfFile(long chatId, byte[] fileBytes);
 
-    /// <summary>
-    /// Get bytes of converted string pdf
-    /// </summary>
-    /// <returns>Bytes of pdf file</returns>
-    Task<byte[]> GetPdfBytes(string text);
-
-    Task SaveFile(string fileId, long chatId);
+    Task SaveFileFromChat(string fileId, long chatId);
 }
