@@ -84,4 +84,28 @@ public class PdfConverter : IPdfConverter
 
         return separatedDocumentBytes;
     }
+
+    public byte[] CompressPdf(byte[] fileBytes)
+    {
+        PdfDocument document = new PdfDocument();
+
+        using (var stream = new MemoryStream(fileBytes))
+        {
+            document = PdfReader.Open(stream, PdfDocumentOpenMode.Import);
+        }
+
+        document.Options.FlateEncodeMode = PdfFlateEncodeMode.BestCompression;
+        document.Options.UseFlateDecoderForJpegImages = PdfUseFlateDecoderForJpegImages.Automatic;
+        document.Options.NoCompression = false;
+        document.Options.CompressContentStreams = true;
+
+        byte[] compressedDocument;
+        using (var stream = new MemoryStream())
+        {
+            document.Save(stream);
+            compressedDocument = stream.ToArray();
+        }
+
+        return compressedDocument;
+    }
 }
