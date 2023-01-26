@@ -14,8 +14,6 @@ public class ConvertPdfCommand : ICommand
 {
     private readonly IUserService _userService;
 
-    private readonly TelegramBotClient _botClient;
-
     private readonly IChatDataProvider _dataProvider;
 
     /// <inheritdoc/>
@@ -27,10 +25,9 @@ public class ConvertPdfCommand : ICommand
     /// <param name="userService">Getting user info service</param>
     /// <param name="bot">Getting bot client service</param>
     /// <param name="dataProvider">Getting chat data service</param>
-    public ConvertPdfCommand(IUserService userService, Bot bot, IChatDataProvider dataProvider)
+    public ConvertPdfCommand(IUserService userService, IChatDataProvider dataProvider)
     {
         _userService = userService;
-        _botClient = bot.GetBot().Result;
         _dataProvider = dataProvider;
     }
 

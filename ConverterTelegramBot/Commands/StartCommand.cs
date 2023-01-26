@@ -42,7 +42,8 @@ public class StartCommand : ICommand
                 new[]
                 {
                     new KeyboardButton(CommandMessage.ConvertMessage),
-                    new KeyboardButton(CommandMessage.SeparateMessage)
+                    new KeyboardButton(CommandMessage.SeparateMessage),
+                    new KeyboardButton(CommandMessage.CompressMessage),
                 }
             }
         );

@@ -58,7 +58,12 @@ public class CommandExecutor : ICommandExecutor
                 }
                 case CommandMessage.SeparateMessage:
                 {
-                    await ExecuteCommand("RequestFileCommand", update);
+                    await ExecuteCommand(CommandName.RequestFileCommandName, update);
+                    return;
+                }
+                case CommandMessage.CompressMessage:
+                {
+                    await ExecuteCommand(CommandName.RequestFileCommandName, update);
                     return;
                 }
             }
@@ -83,7 +88,7 @@ public class CommandExecutor : ICommandExecutor
                     update.Message.Chat.Id
                 );
 
-                await ExecuteCommand(CommandName.RequestPagesCommandName, update);
+                await ExecuteCommand(CommandName.CompressPdfCommand, update);
                 break;
             }
             case CommandName.RequestPagesCommandName:

@@ -12,4 +12,6 @@ public static class CommandMessage
     public const string CommandChoiceMessage = "Выберите необходимое действие";
 
     public const string SeparateFileMessage = "Введите диапазон страниц";
+
+    public const string CompressMessage = "Сжать PDF";
 }

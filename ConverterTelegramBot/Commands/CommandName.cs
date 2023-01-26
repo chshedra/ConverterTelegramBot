@@ -13,4 +13,6 @@ public static class CommandName
     public const string StartCommandName = "StartCommand";
 
     public const string GetTextCommandName = "GetTextCommand";
+
+    public const string CompressPdfCommand = "CompressPdfCommand";
 }
